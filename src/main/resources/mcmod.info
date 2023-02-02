@@ -1,0 +1,17 @@
+[
+    {
+        "modid": "artedprvt",
+        "name": "ArtedPrvt Frame",
+        "version": "1.0@keyboard",
+        "mcversion":"1.12.2",
+        "url": "",
+        "authorList": ["Rawfishc"],
+        "credits": "",
+        "logoFile": "logo.png",
+        "screenshots": [],
+        "useDependencyInformation": true,
+        "requiredMods": [],
+        "dependencies": [],
+        "description": "ArtedPrvt Frame是一个js运行环境，允许玩家编写js脚本实现对Minecraft的简单修改。\n\n作者 ↓\nhttps://space.bilibili.com/455906194"
+    }
+]
