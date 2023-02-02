@@ -29,6 +29,6 @@ public class McpToSrgString {
     }
 
     public static InputStream getInputStream(){
-        return McpToSrgString.class.getClassLoader().getResourceAsStream("mcp_stable/22/srgs/mcp-srg.srg");
+        return McpToSrgString.class.getClassLoader().getResourceAsStream("build/createMcpToSrg/output.tsrg");
     }
 }

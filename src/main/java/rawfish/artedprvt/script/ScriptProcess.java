@@ -127,9 +127,6 @@ public class ScriptProcess {
             ret=11;//进程失效
             return;
         }
-        if(getValueRc()) {
-            ClassCollection.putExtend();
-        }
         ret=0;//进程创建 无效退出
 
         spath=dir+"/script/";

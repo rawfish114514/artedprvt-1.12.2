@@ -12,6 +12,7 @@ import java.util.Map;
  * 混淆类集合
  */
 public class ClassCollection {
+    private static final String VERSION="20171003-1.12";
     public static Map<String,ClassMember> classMap=null;
     /**
      * 加载数据
@@ -20,6 +21,7 @@ public class ClassCollection {
     public static synchronized void load(String srg){
         if(classMap==null){
             classMap=new HashMap<>();
+            present=null;
 
             Reader reader=new StringReader(srg);
             StringBuilder sb=new StringBuilder();
@@ -43,72 +45,64 @@ public class ClassCollection {
             }
             for(int i=0,l=items.size();i<l;i++){
                 String item=items.get(i);
+
+                if(item.length()==0){
+                    continue;
+                }
                 char c=item.charAt(0);
-                if(c=='C'){
-                    //加载类
-                    loadCL(item);
-                    continue;
+                if(c=='\t'){
+                    //字段或方法
+                    String[] d=item.trim().split(" ");
+                    if(d.length==2){
+                        //字段
+                        loadFD(d[0],d[1]);
+                        continue;
+                    }
+                    if(d.length==3){
+                        //方法
+                        loadMD(d[0],d[2]);
+                    }
+                }else{
+                    //类
+                    loadCL(item.substring(item.indexOf(' ')+1));
                 }
-                if(c=='F'){
-                    //加载字段
-                    loadFD(item);
-                    continue;
-                }
-                if(c=='M'){
-                    //加载方法
-                    loadMD(item);
-                    continue;
-                }
+
             }
 
 
         }
+        putExtend();
 
-        /*
         for(ClassMember m:classMap.values()){
             for(String s:m.nameTable.values()){
                 System.out.println(s);
             }
         }
-        */
+
 
     }
 
 
-    public static void loadCL(String item){
-        String[] values=item.split(" ");
-        String className=values[1].replace('/','.');
-
-        classMap.put(className,new ClassMember());
+    public static ClassMember present;
+    public static void loadCL(String className){
+        present=new ClassMember();
+        classMap.put(className.replace('/','.'),present);
     }
 
-    public static void loadFD(String item){
-        String[] values=item.split(" ");
-        String fieldName=values[1];
-        String fieldSrg=values[2];
-        fieldSrg=fieldSrg.replace("\r","");
-        String className=fieldName.substring(0,fieldName.lastIndexOf("/")).replace('/','.');
-        ClassMember member=classMap.get(className);
-        if(member==null){
+    public static void loadFD(String fieldName,String fieldSrg){
+        if(present==null){
             return;
         }
 
-        member.up(fieldName.substring(fieldName.lastIndexOf("/")+1),
-                fieldSrg.substring(fieldSrg.lastIndexOf("/")+1));
+        present.up(fieldName,fieldSrg);
     }
 
-    public static void loadMD(String item){
-        String[] values=item.split(" ");
-        String methodName=values[1];
-        String methodSrg=values[3];
-        String className=methodName.substring(0,methodName.lastIndexOf("/")).replace('/','.');
-        ClassMember member=classMap.get(className);
-        if(member==null){
+    public static void loadMD(String methodName,String methodSrg){
+        if(present==null){
             return;
         }
 
-        member.up(methodName.substring(methodName.lastIndexOf("/")+1),
-                methodSrg.substring(methodSrg.lastIndexOf("/")+1));
+        present.up(methodName,methodSrg);
     }
 
     public static boolean isE=false;
