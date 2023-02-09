@@ -12,6 +12,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -24,21 +25,11 @@ import java.util.Properties;
 
 public class EventLoader
 {
+    public static final EventBus EVENT_BUS = new EventBus();
     public EventLoader()
     {
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
 
-    public static int chat=1;
-    @SubscribeEvent
-    public void onPlayerInteract(PlayerInteractEvent event)
-    {
-    }
-
-    @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent event){
-
-    }
 
 }

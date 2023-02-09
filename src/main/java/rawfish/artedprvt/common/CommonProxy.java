@@ -22,7 +22,7 @@ public class CommonProxy
 
     public void init(FMLInitializationEvent event)
     {
-
+        new EventLoader();
     }
 
     public void postInit(FMLPostInitializationEvent event)
