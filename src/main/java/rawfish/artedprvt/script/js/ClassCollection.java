@@ -72,12 +72,14 @@ public class ClassCollection {
 
         }
         putExtend();
-
+/*
         for(ClassMember m:classMap.values()){
             for(String s:m.nameTable.values()){
                 System.out.println(s);
             }
         }
+
+ */
 
 
     }
