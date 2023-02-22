@@ -3,12 +3,16 @@ package rawfish.artedprvt.script;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import org.mozilla.javascript.NativeJavaClass;
 import rawfish.artedprvt.id.FormatCode;
 
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 /**
  * 脚本系统
@@ -42,7 +46,11 @@ public class ScriptSystem {
             TextComponentString chat=new TextComponentString(String.valueOf(object));
             String hs=String.valueOf(hover);
             if(!(hs.equals("null")||hs.equals("undefined"))){
-                chat.setStyle(new Style().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(String.valueOf(hover)))));
+                chat.setStyle(
+                        new Style()
+                                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(hs)))
+                                .setClickEvent(new CopyEvnet(hs.replaceAll("\u00a7[0-9a-fk-or]","")))
+                );
             }
             sender.sendMessage(chat);
         }
@@ -71,7 +79,11 @@ public class ScriptSystem {
             TextComponentString chat=new TextComponentString(FormatCode.COLOR_7+head+FormatCode.FONT_r+String.valueOf(object));
             String hs=String.valueOf(hover);
             if(!(hs.equals("null")||hs.equals("undefined"))){
-                chat.setStyle(new Style().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(String.valueOf(hover)))));
+                chat.setStyle(
+                        new Style()
+                                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(hs)))
+                                .setClickEvent(new CopyEvnet(hs.replaceAll("\u00a7[0-9a-fk-or]","")))
+                );
             }
             sender.sendMessage(chat);
         }
@@ -157,5 +169,25 @@ public class ScriptSystem {
     //测试接口
     public Object runFunction(String pack,Function function,Object[] args){
         return function.invoke(args);
+    }
+
+    /**
+     * 点击复制事件
+     */
+    public static class CopyEvnet extends ClickEvent {
+
+        public CopyEvnet(String theValue) {
+            super(null, theValue);
+        }
+
+        @Override
+        public ClickEvent.Action getAction(){
+            set(getValue());
+            return null;
+        }
+
+        public void set(String str){
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(str),null);
+        }
     }
 }
