@@ -39,17 +39,23 @@ public class ScriptSystem {
      * 打印消息
      * @param pack 调用者
      * @param object 消息
-     * @param hover 鼠标悬浮信息 可为null
+     * @param hover 鼠标悬浮信息 可为null 可以是TextComponentString对象
      */
     public void print(String pack,Object object,Object hover){
         if(ScriptConst.chat) {
             TextComponentString chat=new TextComponentString(String.valueOf(object));
             String hs=String.valueOf(hover);
+            TextComponentString hoverComponent;
+            if(hover instanceof TextComponentString){
+                hoverComponent=(TextComponentString)hover;
+            }else{
+                hoverComponent=new TextComponentString(hs);
+            }
             if(!(hs.equals("null")||hs.equals("undefined"))){
                 chat.setStyle(
                         new Style()
-                                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(hs)))
-                                .setClickEvent(new CopyEvnet(hs.replaceAll("\u00a7[0-9a-fk-or]","")))
+                                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,hoverComponent))
+                                .setClickEvent(new CopyEvnet(hoverComponent))
                 );
             }
             sender.sendMessage(chat);
@@ -66,7 +72,7 @@ public class ScriptSystem {
      * 输出调试信息
      * @param pack 调用者
      * @param object 信息
-     * @param hover 鼠标悬浮信息 可为null
+     * @param hover 鼠标悬浮信息 可为null 可以是TextComponentString对象
      */
     public void log(String pack,Object object,Object hover){
         if(ScriptConst.debug) {
@@ -77,12 +83,17 @@ public class ScriptSystem {
                 head = String.format("[%s] [%s] [%s] ", pro.name,Thread.currentThread().getName(),pack);
             }
             TextComponentString chat=new TextComponentString(FormatCode.COLOR_7+head+FormatCode.FONT_r+String.valueOf(object));
-            String hs=String.valueOf(hover);
+            String hs=String.valueOf(hover);TextComponentString hoverComponent;
+            if(hover instanceof TextComponentString){
+                hoverComponent=(TextComponentString)hover;
+            }else{
+                hoverComponent=new TextComponentString(hs);
+            }
             if(!(hs.equals("null")||hs.equals("undefined"))){
                 chat.setStyle(
                         new Style()
-                                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(hs)))
-                                .setClickEvent(new CopyEvnet(hs.replaceAll("\u00a7[0-9a-fk-or]","")))
+                                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,hoverComponent))
+                                .setClickEvent(new CopyEvnet(hoverComponent))
                 );
             }
             sender.sendMessage(chat);
@@ -193,15 +204,16 @@ public class ScriptSystem {
     /**
      * 点击复制事件
      */
-    public static class CopyEvnet extends ClickEvent {
-
-        public CopyEvnet(String theValue) {
-            super(null, theValue);
+    public static class CopyEvnet extends ClickEvent{
+        public TextComponentString chatComponents;
+        public CopyEvnet(TextComponentString chatComponents) {
+            super(null, null);
+            this.chatComponents=chatComponents;
         }
 
         @Override
         public ClickEvent.Action getAction(){
-            set(getValue());
+            set(chatComponents.getUnformattedComponentText().replaceAll("\u00a7[0-9a-fk-or]",""));
             return null;
         }
 

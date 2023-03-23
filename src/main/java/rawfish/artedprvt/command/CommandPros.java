@@ -38,13 +38,22 @@ public class CommandPros extends CommandIs {
             throw new WrongUsageException("commands.pros.usage");
         }
         for(ScriptProcess pro:ScriptProcess.proList){
-            TextComponentString chat=new TextComponentString(String.format("process: %s pid: %s",pro.getPack(),pro.getId()));
             int ret=pro.getRet();
             if(ret!=0&&ret!=1){
-                String hover=pro.getStatistics();
-                chat.setStyle(new Style().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(String.valueOf(hover)))));
+                pro.getSys().print(pro.getPack(),
+                        String.format("process: %s pid: %s",pro.getPack(),pro.getId()),
+                        new TextComponentString(null){
+                            public String hover=null;
+                            @Override
+                            public String getUnformattedComponentText()
+                            {
+                                if(pro.getRet()!=7){
+                                    hover=pro.getStatistics();
+                                }
+                                return String.valueOf(hover);
+                            }
+                        });
             }
-            sender.sendMessage(chat);
         }
     }
     @Override
