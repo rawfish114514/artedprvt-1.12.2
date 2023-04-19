@@ -12,7 +12,12 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 
-@Mod(modid=Artedprvt.MODID,name=Artedprvt.NAME,version=Artedprvt.VERSION,useMetadata=true)
+@Mod(
+        modid=Artedprvt.MODID,
+        name=Artedprvt.NAME,
+        useMetadata=true,
+        acceptableRemoteVersions="*"
+)
 public class Artedprvt
 {
     @SidedProxy(clientSide="rawfish.artedprvt.client.ClientProxy",serverSide="rawfish.artedprvt.common.CommonProxy")
