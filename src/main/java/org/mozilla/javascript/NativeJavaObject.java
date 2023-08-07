@@ -6,12 +6,8 @@
 
 package org.mozilla.javascript;
 
-import rawfish.artedprvt.script.MainThread;
-import rawfish.artedprvt.script.ScriptThread;
-import rawfish.artedprvt.script.js.ClassCollection;
-import rawfish.artedprvt.script.js.ClassLevel;
-import rawfish.artedprvt.script.js.ClassMember;
-import rawfish.artedprvt.script.js.NativeJavaMethod2Srg;
+import org.mozilla.javascript.mapping.ClassRegisterer;
+import org.mozilla.javascript.mapping.MemberMapping;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -63,23 +59,19 @@ public class NativeJavaObject implements Scriptable, SymbolScriptable, Wrapper, 
         this.javaObject = javaObject;
         this.staticType = staticType;
         this.isAdapter = isAdapter;
-        this.clas=javaObject.getClass();
-        if(javaObject instanceof Class){
+        if(javaObject==null||javaObject instanceof Class){
             this.clas=(Class)javaObject;
+        }else{
+            this.clas=javaObject.getClass();
         }
-        isConfuse=ClassLevel.isConfuseClass(scope,clas);
+        isMapping = ClassRegisterer.isMapping(scope,clas);
         Thread t=Thread.currentThread();
-        if(t instanceof MainThread){
-            ((MainThread)t).getProcess().addNativeObjectNumber();
-        }else if(t instanceof ScriptThread){
-            ((ScriptThread)t).getMainThread().getProcess().addNativeObjectNumber();
-        }
 
 
         initMembers();
     }
 
-    public boolean isConfuse;
+    public boolean isMapping;
 
     public Class clas;
 
@@ -114,12 +106,12 @@ public class NativeJavaObject implements Scriptable, SymbolScriptable, Wrapper, 
 
     @Override
     public Object get(String name, Scriptable start) {
-        if(isConfuse){
+        if(isMapping){
             //转换为混淆名
-            ClassMember member=ClassCollection.classMap.get(clas.getName());
+            MemberMapping member=ClassRegisterer.classMap.get(clas.getName());
             if(member!=null){
                 String srg = member.get(name);
-                if(!srg.equals(ClassLevel.memberNull)) {
+                if(!srg.equals("0")) {
                     if(srg.contains("/")){
                         try {
                             return NativeJavaMethod2Srg.getNativeJavaMethod2Srg(clas,name,srg);
@@ -165,13 +157,13 @@ public class NativeJavaObject implements Scriptable, SymbolScriptable, Wrapper, 
     @Override
     public void put(String name, Scriptable start, Object value){
 
-        if(isConfuse){
+        if(isMapping){
             //转换为混淆名
-            ClassMember member=ClassCollection.classMap.get(clas.getName());
+            MemberMapping member=ClassRegisterer.classMap.get(clas.getName());
             if(member!=null){
                 String srg = member.get(name);
-                if(!srg.equals(ClassLevel.memberNull)) {
-                    String[] vs=srg.split(ClassLevel.link);
+                if(!srg.equals("0")) {
+                    String[] vs=srg.split("/");
                     for(String v:vs) {
                         put_(v,start,value);
                         return;

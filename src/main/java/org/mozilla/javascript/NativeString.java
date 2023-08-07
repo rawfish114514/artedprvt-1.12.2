@@ -6,14 +6,15 @@
 
 package org.mozilla.javascript;
 
-import static org.mozilla.javascript.ScriptRuntime.rangeError;
-import static org.mozilla.javascript.ScriptRuntimeES6.requireObjectCoercible;
+import org.mozilla.javascript.ScriptRuntime.StringIdOrIndex;
+import org.mozilla.javascript.regexp.NativeRegExp;
 
 import java.text.Collator;
 import java.text.Normalizer;
 import java.util.Locale;
-import org.mozilla.javascript.ScriptRuntime.StringIdOrIndex;
-import org.mozilla.javascript.regexp.NativeRegExp;
+
+import static org.mozilla.javascript.ScriptRuntime.rangeError;
+import static org.mozilla.javascript.ScriptRuntimeES6.requireObjectCoercible;
 
 /**
  * This class implements the String native object.
@@ -27,7 +28,7 @@ import org.mozilla.javascript.regexp.NativeRegExp;
  * @author Norris Boyd
  * @author Ronald Brill
  */
-final class NativeString extends IdScriptableObject {
+public final class NativeString extends IdScriptableObject {
     private static final long serialVersionUID = 920268368584188687L;
 
     private static final Object STRING_TAG = "String";
@@ -37,7 +38,7 @@ final class NativeString extends IdScriptableObject {
         obj.exportAsJSClass(MAX_PROTOTYPE_ID, scope, sealed);
     }
 
-    NativeString(CharSequence s) {
+    public NativeString(CharSequence s) {
         string = s;
     }
 

@@ -1,17 +1,16 @@
-[
-    {
-        "modid": "artedprvt",
-        "name": "ArtedPrvt Frame",
-        "version": "1.1@obsidian",
-        "mcversion":"1.12.2",
-        "url": "\nhttps://gitee.com/rawfishc/artedprvt-1.12.2",
-        "authorList": ["Rawfishc"],
-        "credits": "",
-        "logoFile": "logo.png",
-        "screenshots": [],
-        "useDependencyInformation": true,
-        "requiredMods": [],
-        "dependencies": [],
-        "description": "ArtedPrvt Frame是一个js运行环境，允许玩家编写js脚本实现对Minecraft的简单修改。\n\n作者 ↓\nhttps://space.bilibili.com/455906194"
-    }
-]
+[{
+  "modid": "artedprvt",
+  "name": "Artedprvt Frame",
+  "version": "1.2",
+  "mcversion": "1.12.2",
+  "url": "https://github.com/rawfish114514/artedprvt-1.12.2",
+  "updateUrl": "",
+  "authorList": ["Rawfishc"],
+  "credits": "",
+  "logoFile": "logo2.png",
+  "screenshots": [],
+  "dependencies": [],
+
+
+  "description": ""
+}]
