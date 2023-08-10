@@ -5,6 +5,7 @@ import rawfish.artedprvt.command.CommandMessages;
 import rawfish.artedprvt.core.ScriptProcess;
 import rawfish.artedprvt.mi.ChatProvider;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,15 @@ public class CommandPros extends Command {
                     s+="pid: "+p.getPid();
                     s+="\n";
                     s+=p.getStatistics();
+                    String c =null;
+                    double cpu=p.getCPU();
+                    if (cpu >= 0) {
+                        c = new DecimalFormat("0.0").format(cpu * 100) + "%";
+                    }
+                    if(c!=null) {
+                        s += "\n";
+                        s += "§fcpu: "+c;
+                    }
                     return s;
                 }
                 if(p.getRet()==ScriptProcess.END){

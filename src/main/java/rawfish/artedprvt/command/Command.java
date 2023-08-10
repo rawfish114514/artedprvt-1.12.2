@@ -15,7 +15,6 @@ public abstract class Command extends CommandBase {
     public abstract void process(List<String> args);
     public abstract List<String> complete(List<String> args);
 
-
     public String commandName;
 
     public Command(String commandName){
